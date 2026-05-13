@@ -59,9 +59,15 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const requestUrl = String(originalRequest?.url || "");
+    const isAuthRoute =
+      requestUrl.includes("/auth/login") ||
+      requestUrl.includes("/auth/refresh") ||
+      requestUrl.includes("/auth/refresh-token") ||
+      requestUrl.includes("/auth/logout");
 
     // If access token expired (401) and not already retrying
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest?._retry && !isAuthRoute) {
 
       // If already refreshing, queue this request
       if (isRefreshing) {
@@ -76,7 +82,10 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+        const apiUrl =
+          process.env.NEXT_PUBLIC_API_URL ||
+          api.defaults.baseURL ||
+          "http://localhost:5000/api";
         const response = await axios.get(
           `${apiUrl}/auth/refresh-token`,
           { withCredentials: true }
