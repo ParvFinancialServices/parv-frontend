@@ -192,8 +192,8 @@ const UnifiedLoanManagementTable = ({
           />
 
           <Input
-            placeholder="Connector"
-            className="h-9 border-slate-200 w-[120px]"
+            placeholder="Connector / DSA ID"
+            className="h-9 border-slate-200 w-[160px]"
             value={connectorFilter}
             onChange={(e) => handleConnectorChange?.(e.target.value)}
           />
@@ -251,6 +251,7 @@ const UnifiedLoanManagementTable = ({
               <TableHead className="font-semibold">Loan Type</TableHead>
               <TableHead className="font-semibold">Loan Amount</TableHead>
               <TableHead className="font-semibold">Connector Name</TableHead>
+              <TableHead className="font-semibold">Connector ID</TableHead>
               <TableHead className="font-semibold">Status</TableHead>
               <TableHead className="font-semibold">Created</TableHead>
               <TableHead className="font-semibold text-right">Action</TableHead>
@@ -307,6 +308,9 @@ const UnifiedLoanManagementTable = ({
                   <TableCell className="text-gray-700">
                     {loan.connectorName || "-"}
                   </TableCell>
+                  <TableCell className="text-gray-700">
+                    {loan.connectorId || "-"}
+                  </TableCell>
                   <TableCell>
                     <Badge variant="outline" className={getStatusVariant(loan.status)}>
                       {loan.status || "Application Received"}
@@ -362,7 +366,7 @@ const UnifiedLoanManagementTable = ({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={9} className="text-center py-10 text-gray-500">
+                <TableCell colSpan={10} className="text-center py-10 text-gray-500">
                   No loans found
                 </TableCell>
               </TableRow>

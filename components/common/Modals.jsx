@@ -57,19 +57,19 @@ export const UserSuccessModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="text-center max-w-xs">
-        <CheckCircle2 className="text-green-500 w-12 h-12 mx-auto" />
-        <h2 className="text-lg font-semibold text-green-700 leading-5">{title}</h2>
-        <p className="text-sm text-gray-600 leading-0">{message}</p>
+      <DialogContent className="text-center max-w-sm sm:max-w-md">
+        <CheckCircle2 className="text-green-500 w-12 h-12 mx-auto mb-2" />
+        <h2 className="text-lg font-semibold text-green-700 leading-tight mb-2">{title}</h2>
+        <p className="text-sm text-gray-600 leading-relaxed">{message}</p>
         {
           buttonText ?
-            <div className="flex w-full justify-end">
-              <Button className="mt-4 w-fit mx-auto float-end" onClick={handleRedirect}>
+            <div className="flex w-full justify-center mt-4">
+              <Button className="w-fit mx-auto" onClick={handleRedirect}>
                 {buttonText}
               </Button>
             </div>
             :
-            <div className="h-8"></div>
+            <div className="h-4"></div>
         }
       </DialogContent>
     </Dialog>
