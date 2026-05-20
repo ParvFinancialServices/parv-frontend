@@ -2,9 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ||
-    // "http://localhost:5000/api",
-    'https://parvfinancialservices-backend.onrender.com/api',
+  baseURL: "/api",
   withCredentials: true // send cookies automatically
 });
 
@@ -83,9 +81,8 @@ api.interceptors.response.use(
 
       try {
         const apiUrl =
-          process.env.NEXT_PUBLIC_API_URL ||
           api.defaults.baseURL ||
-          "http://localhost:5000/api";
+          "/api";
         const response = await axios.get(
           `${apiUrl}/auth/refresh-token`,
           { withCredentials: true }

@@ -1,55 +1,62 @@
 import { FormInput } from "@/components/forms/reusable/FormInput";
 import { FormSelect } from "@/components/forms/reusable/FormSelect";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UsersIcon } from "lucide-react";
-import toast from "react-hot-toast";
 
 export function ReferenceDetails({ formData, setFormData, errors, setErrors, validateFields }) {
 
+    const syncReferenceErrors = (nextFormData, fieldName) => {
+        const fieldsToValidate = fieldName ? [fieldName, "references"] : ["references"];
+        const fieldValidation = validateFields(nextFormData, fieldsToValidate);
+
+        setErrors((prevErrors) => {
+            const nextErrors = { ...prevErrors };
+            Object.keys(nextErrors).forEach((key) => {
+                if (key === "references" || key.startsWith("references.")) {
+                    delete nextErrors[key];
+                }
+            });
+            return { ...nextErrors, ...fieldValidation };
+        });
+    };
+
     const addReference = () => {
-        if (formData.references.length < 2) {
-            setFormData((prev) => ({
-                ...prev,
-                references: [
-                    ...prev.references,
-                    { name: "", relation: "", phone: "", village: "", street: "", district: "", pincode: "", profession: "" },
-                ],
-            }));
-        } else {
-            toast.error("Maximum 2 references allowed");
-        }
+        if ((formData.references?.length || 0) >= 5) return;
+
+        const nextFormData = {
+            ...formData,
+            references: [
+                ...(formData.references || []),
+                { name: "", relation: "", phone: "", village: "", street: "", district: "", pincode: "", profession: "" },
+            ],
+        };
+        setFormData(nextFormData);
+        syncReferenceErrors(nextFormData);
     };
 
     const removeReference = (index) => {
         if (formData.references.length > 1) {
-            setFormData((prev) => ({
-                ...prev,
-                references: prev.references.filter((_, i) => i !== index),
-            }));
+            const nextFormData = {
+                ...formData,
+                references: formData.references.filter((_, i) => i !== index),
+            };
+            setFormData(nextFormData);
+            syncReferenceErrors(nextFormData);
         }
     };
 
     const handleReferenceChange = (index, field, value) => {
-        setFormData((prev) => {
-            const updatedReferences = [...prev.references];
-            updatedReferences[index] = { ...updatedReferences[index], [field]: value };
-            return { ...prev, references: updatedReferences };
-        });
-
         const fieldName = `references.${index}.${field}`;
-        const fieldValidation = validateFields(
-            { ...formData, references: formData.references.map((r, i) => i === index ? { ...r, [field]: value } : r) },
-            [fieldName]
-        );
+        const nextFormData = {
+            ...formData,
+            references: formData.references.map((reference, referenceIndex) =>
+                referenceIndex === index ? { ...reference, [field]: value } : reference
+            ),
+        };
 
-        setErrors((prevErrors) => {
-            const nextErrors = { ...prevErrors };
-            if (!fieldValidation[fieldName]) delete nextErrors[fieldName];
-            else nextErrors[fieldName] = fieldValidation[fieldName];
-            return nextErrors;
-        });
+        setFormData(nextFormData);
+        syncReferenceErrors(nextFormData, fieldName);
     };
 
     return (
@@ -62,7 +69,7 @@ export function ReferenceDetails({ formData, setFormData, errors, setErrors, val
                     variant="outline"
                     size="sm"
                     onClick={addReference}
-                    disabled={(formData.references?.length || 0) >= 2}
+                    disabled={(formData.references?.length || 0) >= 5}
                     className="rounded-xl font-bold border-blue-100 text-blue-600 hover:bg-blue-50"
                 >
                     + Add Reference
@@ -90,6 +97,7 @@ export function ReferenceDetails({ formData, setFormData, errors, setErrors, val
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <FormInput
                                 required
+                                id={`references.${idx}.name`}
                                 label="Full Name"
                                 value={ref.name || ""}
                                 onChange={(e) => handleReferenceChange(idx, "name", e.target.value)}
@@ -97,6 +105,7 @@ export function ReferenceDetails({ formData, setFormData, errors, setErrors, val
                             />
                             <FormSelect
                                 required
+                                id={`references.${idx}.relation`}
                                 label="Relation"
                                 value={ref.relation || ""}
                                 onChange={(v) => handleReferenceChange(idx, "relation", v)}
@@ -109,6 +118,7 @@ export function ReferenceDetails({ formData, setFormData, errors, setErrors, val
                             />
                             <FormInput
                                 required
+                                id={`references.${idx}.phone`}
                                 type="tel"
                                 label="Contact Number"
                                 value={ref.phone || ""}
@@ -117,6 +127,7 @@ export function ReferenceDetails({ formData, setFormData, errors, setErrors, val
                             />
                             <FormSelect
                                 required
+                                id={`references.${idx}.profession`}
                                 label="Profession"
                                 value={ref.profession || ""}
                                 onChange={(v) => handleReferenceChange(idx, "profession", v)}
@@ -138,6 +149,7 @@ export function ReferenceDetails({ formData, setFormData, errors, setErrors, val
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                 <FormInput
                                     required
+                                    id={`references.${idx}.village`}
                                     label="Village / Town"
                                     value={ref.village || ""}
                                     onChange={(e) => handleReferenceChange(idx, "village", e.target.value)}
@@ -145,6 +157,7 @@ export function ReferenceDetails({ formData, setFormData, errors, setErrors, val
                                 />
                                 <FormInput
                                     required
+                                    id={`references.${idx}.street`}
                                     label="Street Name"
                                     value={ref.street || ""}
                                     onChange={(e) => handleReferenceChange(idx, "street", e.target.value)}
@@ -152,6 +165,7 @@ export function ReferenceDetails({ formData, setFormData, errors, setErrors, val
                                 />
                                 <FormInput
                                     required
+                                    id={`references.${idx}.district`}
                                     label="District"
                                     value={ref.district || ""}
                                     onChange={(e) => handleReferenceChange(idx, "district", e.target.value)}
@@ -159,6 +173,7 @@ export function ReferenceDetails({ formData, setFormData, errors, setErrors, val
                                 />
                                 <FormInput
                                     required
+                                    id={`references.${idx}.pincode`}
                                     type="number"
                                     label="Pincode"
                                     value={ref.pincode || ""}

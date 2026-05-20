@@ -226,19 +226,26 @@ export const loanApplicationSchema = z
         })
       )
       .min(1, "At least one reference is required.")
-      .max(2, "Maximum 2 references allowed."),
+      .max(5, "Maximum 5 references allowed."),
   })
   .superRefine((data, ctx) => {
     // Check for duplicate phone numbers in references
     if (data.references && data.references.length > 1) {
-      const phones = data.references.map((r) => r.phone).filter((p) => !!p);
-      if (new Set(phones).size !== phones.size) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Duplicate contact numbers across references are not allowed.",
-          path: ["references"],
-        });
-      }
+      const seenPhones = new Map();
+      data.references.forEach((reference, index) => {
+        const phone = reference.phone?.trim();
+        if (!phone) return;
+
+        if (seenPhones.has(phone)) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Duplicate contact numbers across references are not allowed.",
+            path: ["references", index, "phone"],
+          });
+        } else {
+          seenPhones.set(phone, index);
+        }
+      });
     }
     // Conditional validations for Personal Details
     if (data.marital_status === "Married" && !data.spouse_name) {

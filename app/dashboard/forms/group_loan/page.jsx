@@ -165,60 +165,66 @@ const GroupLoan = ({ mode = "create", loanId = null, initialValues = null }) => 
     },
   });
 
+  const syncReferenceErrors = (nextFormData, fieldName) => {
+    const fieldsToValidate = fieldName ? [fieldName, "references"] : ["references"];
+    const fieldValidation = validateFields(nextFormData, fieldsToValidate);
+
+    setErrors((prevErrors) => {
+      const nextErrors = { ...prevErrors };
+      Object.keys(nextErrors).forEach((key) => {
+        if (key === "references" || key.startsWith("references.")) {
+          delete nextErrors[key];
+        }
+      });
+      return { ...nextErrors, ...fieldValidation };
+    });
+  };
+
   const addReference = () => {
-    if (formData.references.length < 2) {
-      setFormData((prev) => ({
-        ...prev,
-        references: [
-          ...prev.references,
-          {
-            name: "",
-            relation: "",
-            phone: "",
-            village: "",
-            street: "",
-            district: "",
-            pincode: "",
-            profession: "",
-          },
-        ],
-      }));
-    }
+    if ((formData.references?.length || 0) >= 5) return;
+
+    const nextFormData = {
+      ...formData,
+      references: [
+        ...(formData.references || []),
+        {
+          name: "",
+          relation: "",
+          phone: "",
+          village: "",
+          street: "",
+          district: "",
+          pincode: "",
+          profession: "",
+        },
+      ],
+    };
+    setFormData(nextFormData);
+    syncReferenceErrors(nextFormData);
   };
 
   const removeReference = (index) => {
     if (formData.references.length > 1) {
-      setFormData((prev) => ({
-        ...prev,
-        references: prev.references.filter((_, i) => i !== index),
-      }));
+      const nextFormData = {
+        ...formData,
+        references: formData.references.filter((_, i) => i !== index),
+      };
+      setFormData(nextFormData);
+      syncReferenceErrors(nextFormData);
     }
   };
 
   const handleReferenceChange = (index, field, value) => {
-    setFormData((prev) => {
-      const updatedReferences = [...prev.references];
-      updatedReferences[index] = { ...updatedReferences[index], [field]: value };
-      return { ...prev, references: updatedReferences };
-    });
-
     const fieldName = `references.${index}.${field}`;
-    const fieldValidation = validateFields(
-      {
-        ...formData,
-        references: formData.references.map((r, i) =>
-          i === index ? { ...r, [field]: value } : r
-        ),
-      },
-      [fieldName]
-    );
+    const nextFormData = {
+      ...formData,
+      references: formData.references.map((reference, referenceIndex) =>
+        referenceIndex === index ? { ...reference, [field]: value } : reference
+      ),
+    };
 
-    setErrors((prevErrors) => {
-      const nextErrors = { ...prevErrors };
-      if (!fieldValidation[fieldName]) delete nextErrors[fieldName];
-      else nextErrors[fieldName] = fieldValidation[fieldName];
-      return nextErrors;
-    });
+    setFormData(nextFormData);
+    syncReferenceErrors(nextFormData, fieldName);
   };
 
   const [uploading, setUploading] = useState({});
@@ -384,17 +390,6 @@ const GroupLoan = ({ mode = "create", loanId = null, initialValues = null }) => 
     }
   };
 
-  const currentStepErrors = useMemo(() => {
-    const fields = stepFields[step] || [];
-    if (!fields.length) return {};
-    return validateFields(formData, fields);
-  }, [step, formData]);
-
-  const isCurrentStepValid = Object.keys(currentStepErrors).length === 0;
-  console.log(isCurrentStepValid);
-  console.log(currentStepErrors);
-
-
   useEffect(() => {
     const firstInput = document.querySelector("[data-autofocus='true']");
     if (firstInput && typeof firstInput.focus === "function") {
@@ -525,7 +520,7 @@ const GroupLoan = ({ mode = "create", loanId = null, initialValues = null }) => 
                 variant="outline"
                 size="sm"
                 onClick={addReference}
-                disabled={(formData.references?.length || 0) >= 2}
+                disabled={(formData.references?.length || 0) >= 5}
                 className="rounded-xl font-bold border-blue-100 text-blue-600 hover:bg-blue-50"
               >
                 + Add Reference
@@ -553,6 +548,7 @@ const GroupLoan = ({ mode = "create", loanId = null, initialValues = null }) => 
                     <div className="space-y-2">
                       <Label className="text-zinc-600 mb-2 font-bold">Full Name <span className="text-red-500">*</span></Label>
                       <Input
+                        id={`references.${idx}.name`}
                         data-autofocus={idx === 0}
                         placeholder="Enter full name"
                         value={ref.name}
@@ -567,7 +563,7 @@ const GroupLoan = ({ mode = "create", loanId = null, initialValues = null }) => 
                         value={ref.relation}
                         onValueChange={(v) => handleReferenceChange(idx, "relation", v)}
                       >
-                        <SelectTrigger className="rounded-xl border-zinc-200">
+                        <SelectTrigger id={`references.${idx}.relation`} className="rounded-xl border-zinc-200">
                           <SelectValue placeholder="Select relation" />
                         </SelectTrigger>
                         <SelectContent>
@@ -581,6 +577,7 @@ const GroupLoan = ({ mode = "create", loanId = null, initialValues = null }) => 
                     <div className="space-y-2">
                       <Label className="text-zinc-600 mb-2 font-bold">Contact Number <span className="text-red-500">*</span></Label>
                       <Input
+                        id={`references.${idx}.phone`}
                         type="tel"
                         placeholder="10-digit mobile number"
                         value={ref.phone}
@@ -595,7 +592,7 @@ const GroupLoan = ({ mode = "create", loanId = null, initialValues = null }) => 
                         value={ref.profession}
                         onValueChange={(v) => handleReferenceChange(idx, "profession", v)}
                       >
-                        <SelectTrigger className="rounded-xl border-zinc-200">
+                        <SelectTrigger id={`references.${idx}.profession`} className="rounded-xl border-zinc-200">
                           <SelectValue placeholder="Select profession" />
                         </SelectTrigger>
                         <SelectContent>
@@ -618,6 +615,7 @@ const GroupLoan = ({ mode = "create", loanId = null, initialValues = null }) => 
                       <div>
                         <Label className="text-xs mb-2 font-bold text-zinc-500">Village / Town <span className="text-red-500">*</span></Label>
                         <Input
+                          id={`references.${idx}.village`}
                           placeholder="Village/Town"
                           value={ref.village}
                           onChange={(e) => handleReferenceChange(idx, "village", e.target.value)}
@@ -628,6 +626,7 @@ const GroupLoan = ({ mode = "create", loanId = null, initialValues = null }) => 
                       <div>
                         <Label className="text-xs mb-2 font-bold text-zinc-500">Street Name <span className="text-red-500">*</span></Label>
                         <Input
+                          id={`references.${idx}.street`}
                           placeholder="Street"
                           value={ref.street}
                           onChange={(e) => handleReferenceChange(idx, "street", e.target.value)}
@@ -638,6 +637,7 @@ const GroupLoan = ({ mode = "create", loanId = null, initialValues = null }) => 
                       <div>
                         <Label className="text-xs mb-2 font-bold text-zinc-500">District <span className="text-red-500">*</span></Label>
                         <Input
+                          id={`references.${idx}.district`}
                           placeholder="District"
                           value={ref.district}
                           onChange={(e) => handleReferenceChange(idx, "district", e.target.value)}
@@ -648,6 +648,7 @@ const GroupLoan = ({ mode = "create", loanId = null, initialValues = null }) => 
                       <div>
                         <Label className="text-xs mb-2 font-bold text-zinc-500">Pincode <span className="text-red-500">*</span></Label>
                         <Input
+                          id={`references.${idx}.pincode`}
                           type="number"
                           placeholder="6 digits"
                           value={ref.pincode}
@@ -858,7 +859,7 @@ const GroupLoan = ({ mode = "create", loanId = null, initialValues = null }) => 
       onReset={resetWholeForm}
       onSubmit={handleGroupSubmit}
       isLastStep={step === formSteps.length - 1}
-      nextDisabled={!isCurrentStepValid}
+      nextDisabled={isSubmitting || activeMutation.isPending}
       submitDisabled={isSubmitting || activeMutation.isPending}
       navDisabled={isSubmitting || activeMutation.isPending}
       submitLabel={

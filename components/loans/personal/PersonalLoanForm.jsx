@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { del } from "idb-keyval";
 import { useRouter } from "next/navigation";
 import { useCreatePersonalLoan, useUpdatePersonalLoan } from "@/hooks/loans/usePersonalLoan";
@@ -161,14 +161,6 @@ export function PersonalLoanForm({ mode = "create", loanId = null, initialValues
         handleFinalSubmit({ ...formData, loanHistory });
     };
 
-    const currentStepErrors = useMemo(() => {
-        const fields = stepFields[step] || [];
-        if (!fields.length) return {};
-        return validateFields(formData, fields);
-    }, [step, formData]);
-
-    const isCurrentStepValid = Object.keys(currentStepErrors).length === 0;
-
     const resetWholeForm = async () => {
         await del("personalLoanForm");
         if (typeof window !== "undefined") {
@@ -218,7 +210,7 @@ export function PersonalLoanForm({ mode = "create", loanId = null, initialValues
             onReset={resetWholeForm}
             onSubmit={handlePersonalSubmit}
             isLastStep={step === formSteps.length - 1}
-            nextDisabled={!isCurrentStepValid}
+            nextDisabled={isSubmitting || activeMutation.isPending}
             submitDisabled={isSubmitting || activeMutation.isPending}
             navDisabled={isSubmitting || activeMutation.isPending}
             submitLabel={activeMutation.isPending ? (isEditMode ? "Updating..." : "Submitting...") : (isEditMode ? "Update Loan" : "Submit Application")}

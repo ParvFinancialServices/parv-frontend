@@ -111,7 +111,25 @@ export const groupLoanSchema = z.object({
       })
     )
     .min(1, "At least one reference is required.")
-    .max(2, "Maximum 2 references allowed."),
+    .max(5, "Maximum 5 references allowed."),
+}).superRefine((data, ctx) => {
+  if (data.references && data.references.length > 1) {
+    const seenPhones = new Map();
+    data.references.forEach((reference, index) => {
+      const phone = reference.phone?.trim();
+      if (!phone) return;
+
+      if (seenPhones.has(phone)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Duplicate contact numbers across references are not allowed.",
+          path: ["references", index, "phone"],
+        });
+      } else {
+        seenPhones.set(phone, index);
+      }
+    });
+  }
 });
 
 // 🔹 Step fields (you can adjust as per UI steps)

@@ -8,7 +8,9 @@ import {
   MoreVertical, 
   CheckCheck,
   Search,
-  Filter
+  Filter,
+  Clock,
+  ChevronRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
