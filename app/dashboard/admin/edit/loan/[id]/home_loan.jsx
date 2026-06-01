@@ -192,11 +192,6 @@ const HomeLoan = ({ id, initialData }) => {
       );
       await Promise.all(uploadPromises);
 
-      console.log(
-        "Final form data with uploaded URLs for Home Loan update:",
-        dataToSubmit
-      );
-
       const token = await userState.user.getIdToken();
       userState.setShowLoader(true);
 

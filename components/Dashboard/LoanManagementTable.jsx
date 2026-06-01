@@ -30,6 +30,8 @@ import {
 import { MoreVertical, Search, ChevronLeft, ChevronRight, Eye, Edit, Trash2 } from "lucide-react";
 import api from "@/api/api";
 import toast from "react-hot-toast";
+import { useAuth } from "@/context/AuthContext";
+import RemarksModal from "@/components/common/RemarksModal";
 
 const LoanManagementTable = ({
     title,
@@ -48,6 +50,7 @@ const LoanManagementTable = ({
     onRefresh,
     refreshData
 }) => {
+    const { user } = useAuth();
     const searchFn = onSearch || handleSearch;
     const refreshFn = onRefresh || refreshData;
     const formKey = loanType?.includes("_loan") ? loanType : `${loanType}_loan`;
@@ -180,26 +183,36 @@ const LoanManagementTable = ({
                                         {loan.createdAt ? new Date(loan.createdAt).toLocaleDateString() : "-"}
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                                    <MoreVertical className="h-4 w-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
-                                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                                <DropdownMenuItem onClick={() => window.location.href = `/dashboard/loans/${loan.id}`}>
-                                                    <Eye className="mr-2 h-4 w-4" /> View
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem onClick={() => window.location.href = `/dashboard/forms/${formKey}?edit=${loan.id}`}>
-                                                    <Edit className="mr-2 h-4 w-4" /> Edit
-                                                </DropdownMenuItem>
-                                                <DropdownMenuSeparator />
-                                                <DropdownMenuItem className="text-red-600 focus:text-red-600" onClick={() => handleDelete(loan.id)}>
-                                                    <Trash2 className="mr-2 h-4 w-4" /> Delete
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
+                                        <div className="flex items-center justify-end gap-2">
+                                            <RemarksModal
+                                                itemType="loan"
+                                                itemId={loan.id}
+                                                user={user}
+                                                remarks={loan.remarks}
+                                                fetchData={refreshFn}
+                                                triggerLabel={loan?.remarks?.length > 0 ? `Remarks (${loan.remarks.length})` : "Remarks"}
+                                            />
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                                        <MoreVertical className="h-4 w-4" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                    <DropdownMenuItem onClick={() => window.location.href = `/dashboard/loans/${loan.id}`}>
+                                                        <Eye className="mr-2 h-4 w-4" /> View
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => window.location.href = `/dashboard/forms/${formKey}?edit=${loan.id}`}>
+                                                        <Edit className="mr-2 h-4 w-4" /> Edit
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuSeparator />
+                                                    <DropdownMenuItem className="text-red-600 focus:text-red-600" onClick={() => handleDelete(loan.id)}>
+                                                        <Trash2 className="mr-2 h-4 w-4" /> Delete
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))

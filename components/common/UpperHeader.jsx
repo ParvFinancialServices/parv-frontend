@@ -13,6 +13,7 @@ const UpperHeader = () => {
         DSA: "/dashboard/dsa",
         RM: "/dashboard/rm",
         "Field Staff": "/dashboard/field-staff",
+        Field_staff: "/dashboard/field-staff",
         Telecaller: "/dashboard/telecaller",
     };
 

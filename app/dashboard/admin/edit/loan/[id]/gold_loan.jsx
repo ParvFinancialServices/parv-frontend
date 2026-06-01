@@ -137,11 +137,6 @@ const GoldLoan = ({ id, initialData }) => {
       );
       await Promise.all(uploadPromises);
 
-      console.log(
-        "Final form data with uploaded URLs for Gold Loan update:",
-        dataToSubmit
-      );
-
       const token = await userState.user.getIdToken(); // Get auth token
       userState.setShowLoader(true); // Show global loader
 

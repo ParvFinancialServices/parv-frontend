@@ -7,8 +7,6 @@ import Link from 'next/link';
 
 const DailyTask = () => {
   const { profile } = useUserState();
-  console.log(profile);
-  
 
   return (
     <div className="p-6 bg-white rounded-lg">

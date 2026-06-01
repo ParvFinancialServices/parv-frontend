@@ -20,12 +20,11 @@ const TelecallerDailyReport = () => {
         const currentDate = new Date().toLocaleString();
         try {
             const res = await fetchTelleCallerDailyReport(token);
-            console.log(res);
             if (res?.success) {
                 setReports(res?.reports);
             }
         } catch (error) {
-            console.log("Error :", error);
+            console.error("Error fetching telecaller reports:", error);
         } finally {
             setLoading(false);
         }

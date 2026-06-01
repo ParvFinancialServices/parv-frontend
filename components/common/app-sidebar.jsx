@@ -30,6 +30,7 @@ export function AppSidebar({ ...props }) {
     RM: RMSidebar,
     Telecaller: TelecallerSidebar,
     "Field Staff": FieldStaffSidebar,
+    Field_staff: FieldStaffSidebar,
   };
   
   const role = userState?.user?.role;

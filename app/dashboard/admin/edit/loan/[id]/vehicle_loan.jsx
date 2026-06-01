@@ -201,11 +201,6 @@ const VehicleLoan = () => {
       );
       await Promise.all(uploadPromises);
 
-      console.log(
-        "Final form data with uploaded URLs for Vehicle Loan update:",
-        dataToSubmit
-      );
-
       const token = await userState.user.getIdToken();
       userState.setShowLoader(true);
 

@@ -22,13 +22,9 @@ export default function Dashboard() {
   const [totals,setTotals] = useState( );
   const [graphData, setGraphData] = useState([]);
 
-  console.log(totals, graphData);
-  
-
   useEffect(() => {
     async function loadData() {
       const data = await fetchDashboardData();
-      console.log("Fetched data:", data);
       if (data?.success) {
         setFetchedReportData(data);
         setTotals(data?.totals );

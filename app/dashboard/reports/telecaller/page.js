@@ -168,7 +168,6 @@ const TelecallerDailyReportPage = ({ token }) => {
   const loadReports = async (date = null) => {
     setLoading(true);
     const res = await fetchTelleCallerDailyReport(token, date);
-    console.log(res);
     
     if (res.success) {
       setReports(res.reports);

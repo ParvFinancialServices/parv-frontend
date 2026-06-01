@@ -2,6 +2,7 @@
   "name": "parv_finanical_services",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "dev:nofork": "node scripts/dev-no-fork.cjs",

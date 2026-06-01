@@ -20,8 +20,6 @@ import {
 import { useState } from "react";
 
 export default function Filter({ arr, id, setValue, column }) {
-  console.log(arr);
-
   const [open, setOpen] = useState(false);
 
   return (
@@ -62,7 +60,6 @@ export default function Filter({ arr, id, setValue, column }) {
                         //   (item) => item.value == currentValue
                         // );
                         let isChecked = newState[id][index].isChecked;
-                        console.log("old state", newState);
 
                         newState[id][index] = {
                           ...newState[id][index],
@@ -70,13 +67,11 @@ export default function Filter({ arr, id, setValue, column }) {
                         };
 
                         // newState[id][index].isChecked = !isChecked;
-                        console.log("new state", newState);
                         return newState;
                       });
 
                       let filterValue = column.getFilterValue();
                       let isIncluded = filterValue.indexOf(currentValue);
-                      console.log("filterValue", filterValue);
                       if (isIncluded == -1) {
                         column.setFilterValue([...filterValue, currentValue]);
                       } else {

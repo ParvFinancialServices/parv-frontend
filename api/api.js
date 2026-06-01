@@ -60,6 +60,7 @@ api.interceptors.response.use(
     const requestUrl = String(originalRequest?.url || "");
     const isAuthRoute =
       requestUrl.includes("/auth/login") ||
+      requestUrl.includes("/auth/me") ||
       requestUrl.includes("/auth/refresh") ||
       requestUrl.includes("/auth/refresh-token") ||
       requestUrl.includes("/auth/logout");
@@ -101,8 +102,6 @@ api.interceptors.response.use(
       } catch (err) {
         isRefreshing = false;
         refreshSubscribers = [];
-
-        console.log("Refresh token failed, logging out...");
 
         // Clear all auth data and redirect to login
         handleLogout();

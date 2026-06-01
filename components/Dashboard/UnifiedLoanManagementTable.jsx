@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import api from "@/api/api";
 import DeleteAlertModal from "@/components/common/DeleteAlertModal";
+import RemarksModal from "@/components/common/RemarksModal";
 import { useAuth } from "@/context/AuthContext";
 import MonthFilter from "@/components/Dashboard/filters/MonthFilter";
 import ExcelExportButton from "@/components/Dashboard/filters/ExcelExportButton";
@@ -318,49 +319,59 @@ const UnifiedLoanManagementTable = ({
                   </TableCell>
                   <TableCell className="text-gray-700">{formatDate(loan.createdAt)}</TableCell>
                   <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Open actions">
-                          <MoreVertical className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-44">
-                        <DropdownMenuItem asChild>
-                          <Link href={`/dashboard/loans/${loan.id}`} className="flex items-center gap-2 cursor-pointer">
-                            <Eye className="h-4 w-4" />
-                            View
-                          </Link>
-                        </DropdownMenuItem>
-                        {canManageLoans && (
-                          <React.Fragment>
-                            <DropdownMenuItem asChild>
-                              <Link
-                                href={`/dashboard/forms/${toFormKey(loan.loanType)}?edit=${loan.id}`}
-                                className="flex items-center gap-2 cursor-pointer"
+                    <div className="flex items-center justify-end gap-2">
+                      <RemarksModal
+                        itemType="loan"
+                        itemId={loan.id}
+                        user={user}
+                        remarks={loan.remarks}
+                        fetchData={refreshData}
+                        triggerLabel={loan?.remarks?.length > 0 ? `Remarks (${loan.remarks.length})` : "Remarks"}
+                      />
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8" aria-label="Open actions">
+                            <MoreVertical className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-44">
+                          <DropdownMenuItem asChild>
+                            <Link href={`/dashboard/loans/${loan.id}`} className="flex items-center gap-2 cursor-pointer">
+                              <Eye className="h-4 w-4" />
+                              View
+                            </Link>
+                          </DropdownMenuItem>
+                          {canManageLoans && (
+                            <React.Fragment>
+                              <DropdownMenuItem asChild>
+                                <Link
+                                  href={`/dashboard/forms/${toFormKey(loan.loanType)}?edit=${loan.id}`}
+                                  className="flex items-center gap-2 cursor-pointer"
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                  Edit
+                                </Link>
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                className="flex items-center gap-2 cursor-pointer text-red-600 focus:text-red-600"
+                                disabled={isDeleting}
+                                onClick={() => {
+                                  setDeleteModal({
+                                    open: true,
+                                    loanId: loan.id,
+                                    applicantName: loan.applicantName || loan.loanId || "this loan",
+                                  });
+                                }}
                               >
-                                <Pencil className="h-4 w-4" />
-                                Edit
-                              </Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              className="flex items-center gap-2 cursor-pointer text-red-600 focus:text-red-600"
-                              disabled={isDeleting}
-                              onClick={() => {
-                                setDeleteModal({
-                                  open: true,
-                                  loanId: loan.id,
-                                  applicantName: loan.applicantName || loan.loanId || "this loan",
-                                });
-                              }}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                              Delete
-                            </DropdownMenuItem>
-                          </React.Fragment>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                                <Trash2 className="h-4 w-4" />
+                                Delete
+                              </DropdownMenuItem>
+                            </React.Fragment>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))

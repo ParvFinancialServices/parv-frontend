@@ -6,7 +6,6 @@ import { Mail, Phone, MapPin, User } from "lucide-react";
 import { getAllContactSubmissions } from "@/lib/actions/admin";
 
 const ContactCardList = ({ contacts }) => {
-    console.log("Contacts:", contacts);
     if (!contacts || contacts.length === 0) {
         return <p className="text-gray-500 text-sm">No contact messages found.</p>;
     }

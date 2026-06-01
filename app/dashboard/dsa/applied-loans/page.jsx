@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { getLoanDataByType } from "@/lib/actions/dsa";
+import RemarksModal from "@/components/common/RemarksModal";
 import React, { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/context/AuthContext";
 import Spinner from "@/components/common/Spinners";
@@ -111,12 +112,21 @@ const LoanTable = () => {
                                         </Badge>
                                     </td>
                                     <td className="px-4 py-4 text-sm whitespace-nowrap">
-                                        <Link
-                                            href={`/dashboard/loans/${loan.id}`}
-                                            className="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 transition-colors hover:bg-blue-100"
-                                        >
-                                            View Details
-                                        </Link>
+                                        <div className="flex flex-wrap gap-2">
+                                            <Link
+                                                href={`/dashboard/loans/${loan.id}`}
+                                                className="inline-flex items-center rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 transition-colors hover:bg-blue-100"
+                                            >
+                                                View Details
+                                            </Link>
+                                            <RemarksModal
+                                                itemType="loan"
+                                                itemId={loan.id}
+                                                user={user}
+                                                remarks={loan.remarks}
+                                                triggerLabel={`Remarks (${loan.remarkCount || 0})`}
+                                            />
+                                        </div>
                                     </td>
                                 </tr>
                             ))

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
@@ -90,7 +90,7 @@ const FieldGrid = ({ items }) => {
       {items.map(({ label, value }) => (
         <div key={label} className="rounded-lg border border-gray-100 p-3">
           <div className="text-xs text-gray-500">{label}</div>
-          <div className="text-sm font-medium text-gray-900 break-words">
+          <div className="text-sm font-medium text-gray-900 wrap-break-word">
             {value ?? "-"}
           </div>
         </div>
@@ -130,32 +130,29 @@ export default function LoanDetailsPage() {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [updatingStatus, setUpdatingStatus] = useState(false);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    const fetchDetails = async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const res = await api.get(`/loans/${id}`);
-        if (!cancelled && res.data?.success) {
-          setLoanType(res.data.loanType || "");
-          setLoanKey(res.data.loanKey || "");
-          setData(res.data.data || null);
-          setSelectedStatus(res.data?.data?.status || "Application Received");
-        }
-      } catch (e) {
-        if (!cancelled) setError(e.response?.data?.message || "Failed to load loan details");
-      } finally {
-        if (!cancelled) setLoading(false);
+  const fetchDetails = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await api.get(`/loans/${id}`);
+      if (res.data?.success) {
+        setLoanType(res.data.loanType || "");
+        setLoanKey(res.data.loanKey || "");
+        setData(res.data.data || null);
+        setSelectedStatus(res.data?.data?.status || "Application Received");
       }
-    };
-
-    if (id) fetchDetails();
-    return () => {
-      cancelled = true;
-    };
+    } catch (e) {
+      setError(e.response?.data?.message || "Failed to load loan details");
+    } finally {
+      setLoading(false);
+    }
   }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      fetchDetails();
+    }
+  }, [id, fetchDetails]);
 
   const sections = useMemo(() => {
     if (!data) return null;
@@ -329,7 +326,7 @@ export default function LoanDetailsPage() {
 
   return (
     <div className="container mx-auto py-8 px-4 space-y-6">
-      <Card className="border-0 shadow-lg bg-gradient-to-r from-indigo-50 via-white to-blue-50">
+      <Card className="border-0 shadow-lg bg-linear-to-r from-indigo-50 via-white to-blue-50">
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
             <div className="space-y-2">

@@ -2,6 +2,7 @@
 
 import api from "@/api/api";
 import { useUserState } from "@/app/dashboard/store";
+import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 const AuthContext = createContext();
@@ -10,6 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const dashboardStore = useUserState();
+  const pathname = usePathname();
   // Prevent stale /auth/me results from overwriting a successful login.
   const authRequestId = useRef(0);
 
@@ -34,8 +36,20 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    const isProtectedRoute = pathname?.startsWith("/dashboard");
+
+    if (!isProtectedRoute) {
+      setLoading(false);
+      return;
+    }
+
+    if (user) {
+      setLoading(false);
+      return;
+    }
+
     loadUser();
-  }, []);
+  }, [pathname, user]);
 
   // Login function
   const login = async (username, password) => {

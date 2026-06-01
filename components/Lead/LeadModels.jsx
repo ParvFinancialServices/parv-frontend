@@ -49,8 +49,9 @@ export const LeadDialog = ({ lead }) => {
 
   const handleSave = () => {
     if (!status) return;
+    const leadId = lead._id || lead.id;
     updateStatusMutation.mutate(
-      { id: lead.id, newStatus: status },
+      { id: leadId, newStatus: status },
       {
         onSuccess: () => {
           setMessage("✅ Status updated successfully!");

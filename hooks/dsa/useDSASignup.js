@@ -69,7 +69,6 @@ export default function useSignUpDSA() {
     }, [form]);
     const [errors, setErrors] = useState({});
     const [openSuccess, setOpenSuccess] = useState(false);
-    console.log(form);
 
     // ----------------------------------------------------
     // Text & Select Handlers

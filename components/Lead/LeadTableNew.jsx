@@ -144,9 +144,6 @@ export default function LeadTableNew() {
     a.click();
   };
 
-  console.log(leads);
-
-
   return (
     <div className="space-y-6">
       {/* Filters Section */}

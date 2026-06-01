@@ -160,3 +160,63 @@ export function useAddLeadRemark() {
   });
 }
 
+export function useDeleteLeadRemark() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ leadId, remarkId }) => {
+      const res = await api.delete(`/leads/${leadId}/remarks/${remarkId}`);
+      return res.data;
+    },
+    onSuccess: (response) => {
+      if (response.success) {
+        toast.success("Remark deleted successfully");
+        queryClient.invalidateQueries({ queryKey: ["leads"] });
+      }
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to delete remark");
+    },
+  });
+}
+
+export function useAddLoanRemark() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ loanId, remarkData }) => {
+      const res = await api.post(`/loans/${loanId}/remarks`, remarkData);
+      return res.data;
+    },
+    onSuccess: (response) => {
+      if (response.success) {
+        toast.success("Remark added successfully");
+        queryClient.invalidateQueries({ queryKey: ["loans"] });
+      }
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to add remark");
+    },
+  });
+}
+
+export function useDeleteLoanRemark() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ loanId, remarkIndex }) => {
+      const res = await api.delete(`/loans/${loanId}/remarks/${remarkIndex}`);
+      return res.data;
+    },
+    onSuccess: (response) => {
+      if (response.success) {
+        toast.success("Remark deleted successfully");
+        queryClient.invalidateQueries({ queryKey: ["loans"] });
+      }
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to delete remark");
+    },
+  });
+}
+

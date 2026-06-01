@@ -1,7 +1,9 @@
 const backendApiUrl =
   process.env.BACKEND_API_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
-  "https://parvfinancialservices-backend.onrender.com/api";
+  (process.env.NODE_ENV === "production"
+    ? "https://parvfinancialservices-backend.onrender.com/api"
+    : "http://localhost:5000/api");
 
 const nextConfig = {
   images: {

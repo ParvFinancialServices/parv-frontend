@@ -130,7 +130,7 @@ const GroupLoan = ({ id, initialData }) => {
                 alert(result?.message);
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
             alert("something went wrong !");
         } finally {
             setRemoving((prev) => ({ ...prev, [`${index}-${id}`]: true }));

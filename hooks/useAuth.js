@@ -23,31 +23,21 @@ export function useLogin() {
       return result;
     },
     onSuccess: ({ user }) => {
+      const dashboardPathByRole = {
+        Admin: "/dashboard/",
+        DSA: "/dashboard/dsa",
+        Telecaller: "/dashboard/telecaller",
+        "Field Staff": "/dashboard/field-staff",
+        Field_staff: "/dashboard/field-staff",
+        RM: "/dashboard/rm",
+      };
+
       // Update user state
       userState.setUser({ role: user?.role, username: user?.username });
 
-      // Invalidate queries
-      queryClient.invalidateQueries({ queryKey: ["user"] });
-
       toast.success("Login successful!");
-      // Redirect based on role
-      switch (user?.role) {
-        case "Admin":
-          router.push("/dashboard/");
-          break;
-        case "DSA":
-          router.push("/dashboard/dsa");
-          break;
-        case "Telecaller":
-          router.push("/dashboard/telecaller");
-          break;
-        case "Field Staff":
-          router.push("/dashboard/field-staff");
-          break;
-        default:
-          router.push("/dashboard/rm");
-          break;
-      }
+      queryClient.removeQueries({ queryKey: ["user"] });
+      router.replace(dashboardPathByRole[user?.role] || "/dashboard/rm");
     },
     onError: (error) => {
       toast.error(error.message || "Login failed");

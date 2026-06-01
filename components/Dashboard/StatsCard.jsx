@@ -9,8 +9,6 @@ import { Car } from 'lucide-react';
 import { HandshakeIcon } from 'lucide-react';
 
 export const StatsCards = (stats) => {
-  console.log(stats);
-
   const { totalAmount, totalApplications, typeWise } = stats?.stats;
 
   const formatCurrency = (amount) => {

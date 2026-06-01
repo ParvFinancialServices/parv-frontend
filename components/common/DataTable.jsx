@@ -310,11 +310,6 @@ export function DataTable({
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
-  console.log(data);
-
-  console.log(table);
-  console.log(table?.getRowModel?.());
-
 
   return (
     <>

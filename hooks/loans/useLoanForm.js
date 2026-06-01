@@ -141,7 +141,6 @@ export const useLoanForm = ({
         const fieldsToValidate = stepFields[step];
         if (fieldsToValidate && fieldsToValidate.length > 0) {
             const stepErrors = validateFields(formData, fieldsToValidate);
-            console.log(stepErrors);
 
             if (Object.keys(stepErrors).length > 0) {
                 setErrors((prev) => ({ ...prev, ...stepErrors }));

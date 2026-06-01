@@ -16,8 +16,6 @@ export default function Page({ params }) {
   const userState = useUserState();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
-  console.log(data?.data);
-  
 
   useEffect(() => {
     const fetchLoan = async () => {

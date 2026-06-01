@@ -153,7 +153,6 @@ export default function ApplyPage() {
         setErrors({}); // Clear errors if validation passes
 
         // Submit logic here
-        console.log("Form Data:", formData);
         alert(
           "Form submitted successfully! Confirmation sent to your email and WhatsApp."
         );
