@@ -102,7 +102,7 @@ export default function LeadsTable() {
                                             <div className="flex flex-col gap-1">
                                                 <LeadDialog lead={lead} />
                                                 <RemarksModal
-                                                    leadId={lead?._id}
+                                                    itemId={lead?._id}
                                                     remarks={lead?.remarks}
                                                     user={user?.profile}
                                                     fetchLeads={refetch}

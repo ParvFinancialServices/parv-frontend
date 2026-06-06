@@ -275,7 +275,7 @@ export default function LeadTableNew() {
                       <div className="flex justify-end gap-1 md:group-hover:opacity-100 transition-opacity">
                         <LeadDialog lead={lead} />
                         <RemarksModal
-                          leadId={lead?._id}
+                          itemId={lead?._id}
                           remarks={lead?.remarks}
                           user={user?.profile}
                           fetchLeads={refetch}

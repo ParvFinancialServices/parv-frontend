@@ -48,12 +48,12 @@ const loanTypes = [
   {
     title: "Plot + Construction",
     desc: "Combine land purchase with construction funding under one plan.",
-    img: "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=1200&q=80",
+    img: "/services/home_loan2.png",
   },
   {
     title: "Home Renovation",
     desc: "Upgrade interiors, extend rooms, or modernize utilities with flexible EMIs.",
-    img: "https://images.unsplash.com/photo-1582719478181-2f2df46b84c5?auto=format&fit=crop&w=1200&q=80",
+    img: "/services/home_loan3.png",
   },
 ];
 
@@ -69,22 +69,18 @@ const eligibility = [
   {
     title: "Salaried / Self-employed",
     desc: "Stable income proof, 21-65 years, minimum 2 years employment or 3 years business vintage.",
-    img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=60",
   },
   {
     title: "Indian Resident / NRI",
     desc: "Both resident Indians and NRIs can apply subject to local regulations.",
-    img: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=400&q=60",
   },
   {
     title: "Good Credit Profile",
     desc: "Higher credit scores unlock better interest rates and higher LTV.",
-    img: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=400&q=60",
   },
   {
     title: "Property Compliance",
     desc: "Clear titles, approved plans, and valuation aligned to loan amount.",
-    img: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=400&q=60",
   },
 ];
 
@@ -143,7 +139,7 @@ export default function HomeLoanPage() {
 
         <div className="relative h-full w-full overflow-hidden rounded-[22px]">
           <Image
-            src="https://images.unsplash.com/photo-1582719478250-98d3b2f6c1c7?auto=format&fit=crop&w=1400&q=80"
+            src="/services/homeloan1.png"
             alt="Indian family home interior"
             fill
             priority
@@ -174,9 +170,9 @@ export default function HomeLoanPage() {
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-blue-700">Process</p>
             <h2 className="text-2xl font-black text-slate-900">Your step-by-step journey</h2>
           </div>
-          <Button className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-bold text-white hover:bg-blue-700">
+          {/* <Button className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-bold text-white hover:bg-blue-700">
             Check Eligibility
-          </Button>
+          </Button> */}
         </div>
         <div className="mt-6 grid gap-4 md:grid-cols-5">
           {processSteps.map((step, idx) => (
@@ -221,9 +217,6 @@ export default function HomeLoanPage() {
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {eligibility.map((item) => (
               <div key={item.title} className="flex gap-3 rounded-xl border border-slate-200 bg-slate-50/60 p-4">
-                <div className="relative h-16 w-16 overflow-hidden rounded-lg">
-                  <Image src={item.img} alt={item.title} fill className="object-cover" />
-                </div>
                 <div>
                   <h3 className="text-base font-semibold text-slate-900">{item.title}</h3>
                   <p className="mt-1 text-sm leading-6 text-slate-600">{item.desc}</p>

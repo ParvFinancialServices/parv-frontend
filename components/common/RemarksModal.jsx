@@ -18,13 +18,16 @@ import toast from "react-hot-toast";
 
 export default function RemarksModal({
   remarks,
-  itemId,
+  itemId: propItemId,
+  leadId,
+  loanId,
   itemType = "lead",
   user,
   triggerLabel = "Remarks",
   fetchData,
   showAddRemark = true,
 }) {
+  const itemId = propItemId ?? leadId ?? loanId;
   const [open, setOpen] = useState(false);
   const [newRemark, setNewRemark] = useState("");
   const [localRemarks, setLocalRemarks] = useState(Array.isArray(remarks) ? remarks : []);
