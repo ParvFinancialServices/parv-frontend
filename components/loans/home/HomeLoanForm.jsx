@@ -54,7 +54,7 @@ export function HomeLoanForm({ mode = "create", loanId = null, initialValues = n
         loan_amount: "",
         id_of_connector: "",
         name_of_connector: "",
-        // purpose_of_loan: "To purchase property",
+        purpose_of_loan: "",
         loan_type: "",
         applicant_name: "",
         fathers_name: "",

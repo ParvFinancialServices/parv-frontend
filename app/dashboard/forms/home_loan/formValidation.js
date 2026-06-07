@@ -412,7 +412,7 @@ export const stepFields = {
     "loan_amount",
     "id_of_connector",
     "name_of_connector",
-    // "purpose_of_loan",
+    "purpose_of_loan",
     "loan_type",
     "applicant_name",
     "fathers_name",

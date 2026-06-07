@@ -40,7 +40,7 @@ export function PersonalDetails({ formData, handleFieldChange, errors }) {
                         { label: "Land Purchase", value: "Land Purchase" },
                     ]}
                 />
-                {/* <FormSelect
+                <FormSelect
                     required
                     label="Purpose"
                     id="purpose_of_loan"
@@ -48,11 +48,11 @@ export function PersonalDetails({ formData, handleFieldChange, errors }) {
                     onChange={(v) => handleFieldChange("purpose_of_loan", v)}
                     error={errors?.purpose_of_loan}
                     options={[
-                        "To purchase property", "For marrage at home", "For Education",
+                        "To purchase property", "For marriage at home", "For Education",
                         "To pay credit card bill", "To repay other loan", "To construct home",
                         "For other Personal reason"
                     ].map(p => ({ label: p, value: p }))}
-                /> */}
+                />
                 <FormInput
                     required
                     label="Applicant Name"
