@@ -101,7 +101,10 @@ export default function DSADashboardPage() {
           </h1>
           <p className="text-slate-500 mt-2">Track your applications, commission status, and payout progress.</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-3 flex-wrap">
+          <Button asChild variant="outline" className="bg-white">
+            <Link href="/dashboard/dsa/leads">My Leads</Link>
+          </Button>
           <Button asChild variant="outline" className="bg-white">
             <Link href="/dashboard/dsa/applied-loans">View Applied Loans</Link>
           </Button>

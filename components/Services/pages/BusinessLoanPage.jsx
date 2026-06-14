@@ -43,12 +43,12 @@ const loanTypes = [
   {
     title: "Working Capital Loan",
     desc: "Manage inventory, payroll, and receivables with flexible limits.",
-    img: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=1200&q=80",
+    img: "/services/working_capital_loan.webp",
   },
   {
     title: "Machinery / CapEx Loan",
     desc: "Upgrade equipment to boost capacity without straining cash.",
-    img: "https://images.unsplash.com/photo-1507209696998-3c532be9b2b4?auto=format&fit=crop&w=1200&q=80",
+    img:"/services/mechaniry.webp"
   },
   {
     title: "Invoice / Bill Discounting",
@@ -143,7 +143,7 @@ export default function BusinessLoanPage() {
 
         <div className="relative h-full w-full overflow-hidden rounded-[22px]">
           <Image
-            src="https://images.unsplash.com/photo-1520607162513-8ed2784dbf9f?auto=format&fit=crop&w=1400&q=80"
+            src="/services/businessloan.webp"
             alt="Indian business discussion"
             fill
             priority
@@ -221,9 +221,6 @@ export default function BusinessLoanPage() {
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {eligibility.map((item) => (
               <div key={item.title} className="flex gap-3 rounded-xl border border-slate-200 bg-slate-50/60 p-4">
-                <div className="relative h-16 w-16 overflow-hidden rounded-lg">
-                  <Image src={item.img} alt={item.title} fill className="object-cover" />
-                </div>
                 <div>
                   <h3 className="text-base font-semibold text-slate-900">{item.title}</h3>
                   <p className="mt-1 text-sm leading-6 text-slate-600">{item.desc}</p>

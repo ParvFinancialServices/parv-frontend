@@ -29,7 +29,7 @@ export function useLogin() {
         Telecaller: "/dashboard/telecaller",
         "Field Staff": "/dashboard/field-staff",
         Field_staff: "/dashboard/field-staff",
-        RM: "/dashboard/rm",
+        RM: "/dashboard",
       };
 
       // Update user state
